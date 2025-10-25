@@ -9,7 +9,7 @@ services:
       - "19132:19132/udp"   # Porta do jogo Bedrock
       - "${RCON_PORT}:${RCON_PORT}/tcp"   # Porta RCON
     environment:
-      EULA: TRUE  # Simplificado, sem aspas
+      EULA: TRUE
       SERVER_NAME: "${SERVER_NAME}"
       GAMEMODE: "survival"
       DIFFICULTY: "normal"
@@ -19,8 +19,7 @@ services:
       RCON_PORT: "${RCON_PORT}"
       TZ: "${TZ}"
     volumes:
-      - ./data:/data
-      - ./bedrock_addons:/data/addons  # Addons sincronizados
+      - ./data:/data  # Apenas dados do mundo e configurações
 
   bedrock-panel:
     image: itzg/rcon:latest
