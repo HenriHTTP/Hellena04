@@ -1,13 +1,15 @@
 services:
   bedrock:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile
     container_name: bedrock-server
     restart: unless-stopped
     ports:
-      - "19132:19132/udp"   # porta do jogo
-      - "${RCON_PORT}:${RCON_PORT}/tcp"   # porta RCON
+      - "19132:19132/udp"   # Porta do jogo Bedrock
+      - "${RCON_PORT}:${RCON_PORT}/tcp"   # Porta RCON
     environment:
-      EULA: "TRUE"
+      EULA: TRUE  # Simplificado, sem aspas
       SERVER_NAME: "${SERVER_NAME}"
       GAMEMODE: "survival"
       DIFFICULTY: "normal"
@@ -18,21 +20,19 @@ services:
       TZ: "${TZ}"
     volumes:
       - ./data:/data
-      - ./bedrock_addons:/data/addons  # Addons persistem via volume
+      - ./bedrock_addons:/data/addons  # Addons sincronizados
 
   bedrock-panel:
-    image: itzg/rcon:latest  # Imagem correta!
+    image: itzg/rcon:latest
     container_name: bedrock-panel
     restart: unless-stopped
     ports:
-      - "4326:4326"  # UI web do rcon-web-admin
-      # Opcional: - "4327:4327"  # WebSocket para chat
+      - "4326:4326"  # Porta do painel web
     environment:
-      RWA_USERNAME: "admin"  # Usuário para login no painel
-      RWA_PASSWORD: "sua-senha-segura-aqui"  # Senha para o painel (adicione ao .env!)
-      RWA_ADMIN: "TRUE"  # Modo admin
-      RWA_RCON_HOST: "bedrock"  # Nome do serviço do servidor
+      RWA_USERNAME: "admin"
+      RWA_PASSWORD: "${RWA_PASSWORD}"
+      RWA_ADMIN: "TRUE"
+      RWA_RCON_HOST: "bedrock"
       RWA_RCON_PORT: "${RCON_PORT}"
       RWA_RCON_PASSWORD: "${RCON_PASSWORD}"
       RWA_SERVER_NAME: "${SERVER_NAME}"
-      # Opcional: RWA_PORT=4326  # Porta interna do painel
