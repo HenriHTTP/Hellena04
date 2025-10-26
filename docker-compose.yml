@@ -23,7 +23,7 @@ services:
     deploy:
       replicas: 1
       restart_policy:
-        condition: unless-stopped
+        condition: on-failure  # Corrigido: substitui 'unless-stopped'
 
   # SERVIÇO 2: Painel Web RCON (Frontend de administração)
   bedrock-panel:
@@ -47,4 +47,4 @@ services:
     deploy:
       replicas: 1
       restart_policy:
-        condition: unless-stopped
+        condition: on-failure  # Corrigido: substitui 'unless-stopped'
