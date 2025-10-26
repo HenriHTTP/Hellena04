@@ -1,18 +1,16 @@
+version: '3.8'  # Versão compatível com Swarm
+
 services:
   # SERVIÇO 1: Servidor Minecraft Bedrock
   bedrock:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    container_name: bedrock-server
-    restart: unless-stopped
+    image: bedrock-server:${IMAGE_TAG}  # Use a imagem buildada; ajuste se pushada para registry
     # Publica a porta do Jogo (UDP 19132) e a porta RCON (TCP 25575)
     ports:
       - "19132:19132/udp"
       - "${RCON_PORT}:${RCON_PORT}/tcp" # 25575:25575/tcp
     environment:
       # Variáveis lidas do arquivo .env
-      EULA: "${EULA}"  # Corrigido: agora puxa do .env como string
+      EULA: "${EULA}"
       SERVER_NAME: "${SERVER_NAME}"
       GAMEMODE: "${GAMEMODE}"
       DIFFICULTY: "${DIFFICULTY}"
@@ -24,12 +22,14 @@ services:
       TZ: "${TZ}"
     volumes:
       - ./data:/data # Armazena dados do mundo e configs em uma pasta local
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: unless-stopped
 
   # SERVIÇO 2: Painel Web RCON (Frontend de administração)
   bedrock-panel:
     image: itzg/rcon:latest
-    container_name: bedrock-panel
-    restart: unless-stopped
     # Publica a porta de acesso ao painel web (TCP 4326)
     ports:
       - "4326:4326"
@@ -38,7 +38,7 @@ services:
       RWA_USERNAME: "admin"
       RWA_PASSWORD: "${RWA_PASSWORD}"
       RWA_ADMIN: "TRUE"
-      # Conecta-se ao serviço 'bedrock' (nome do container) na porta 25575
+      # Conecta-se ao serviço 'bedrock' (nome do serviço no Swarm)
       RWA_RCON_HOST: "bedrock" 
       RWA_RCON_PORT: "${RCON_PORT}"
       RWA_RCON_PASSWORD: "${RCON_PASSWORD}"
@@ -46,3 +46,7 @@ services:
     # Garante que o painel só inicie depois que o servidor estiver rodando
     depends_on:
       - bedrock
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: unless-stopped
