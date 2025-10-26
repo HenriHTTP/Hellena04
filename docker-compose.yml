@@ -12,7 +12,7 @@ services:
       - "${RCON_PORT}:${RCON_PORT}/tcp" # 25575:25575/tcp
     environment:
       # Variáveis lidas do arquivo .env
-      EULA: TRUE
+      EULA: "${EULA}"  # Corrigido: agora puxa do .env como string
       SERVER_NAME: "${SERVER_NAME}"
       GAMEMODE: "${GAMEMODE}"
       DIFFICULTY: "${DIFFICULTY}"
