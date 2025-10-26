@@ -3,8 +3,8 @@ FROM itzg/minecraft-bedrock-server:latest
 
 # Diretório de trabalho
 WORKDIR /data
-# EXPOSE 19132 e EXPOSE 44433 (ou 25575) não são estritamente necessários no Dockerfile, 
-# pois o docker-compose faz a publicação, mas mantemos para documentação.
+
+# EXPOSE não é estritamente necessário, mas mantido para documentação
 EXPOSE 19132/udp
 EXPOSE 25575/tcp
 
