@@ -1,5 +1,3 @@
-version: '3.8'  # Versão compatível com Swarm
-
 services:
   # SERVIÇO 1: Servidor Minecraft Bedrock
   bedrock:
@@ -39,7 +37,7 @@ services:
       RWA_PASSWORD: "${RWA_PASSWORD}"
       RWA_ADMIN: "TRUE"
       # Conecta-se ao serviço 'bedrock' (nome do serviço no Swarm)
-      RWA_RCON_HOST: "bedrock" 
+      RWA_RCON_HOST: "bedrock"
       RWA_RCON_PORT: "${RCON_PORT}"
       RWA_RCON_PASSWORD: "${RCON_PASSWORD}"
       RWA_SERVER_NAME: "${SERVER_NAME}"
